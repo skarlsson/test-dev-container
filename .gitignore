@@ -1,0 +1,30 @@
+# Bazel
+/bazel-*
+/.bazelrc.user
+
+# CLion specific files
+.idea/
+cmake-build-*/
+*.iws
+*.iml
+*.ipr
+
+# Docker specific files
+.dockerignore
+
+# Backup files
+*~
+*.bak
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+/build
+/bin
+/out
+
+# Dependencies
+/node_modules
+/vendor

@@ -1,0 +1,40 @@
+# Common Bazel settings for development
+
+# Enable strict action env which requires action environments to be explicitly declared
+build --incompatible_strict_action_env
+
+# Use C++17 by default
+build --cxxopt='-std=c++17'
+
+# Enable more warnings and treat them as errors
+build --cxxopt='-Wall'
+build --cxxopt='-Werror'
+build --cxxopt='-Wextra'
+build --cxxopt='-Wpedantic'
+
+# Enable debug information
+build:debug --cxxopt='-g'
+build:debug --compilation_mode=dbg
+
+# Release optimizations
+build:release --compilation_mode=opt
+
+# Enable address sanitizer
+build:asan --cxxopt='-fsanitize=address'
+build:asan --linkopt='-fsanitize=address'
+
+# Enable thread sanitizer
+build:tsan --cxxopt='-fsanitize=thread'
+build:tsan --linkopt='-fsanitize=thread'
+
+# Enable test coverage
+build:coverage --combined_report=lcov
+build:coverage --coverage_report_generator=@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main
+build:coverage --instrument_test_targets
+
+# Generate compile_commands.json for CLion
+build:clion --aspects=@hedron_compile_commands//:aspects.bzl%compilation_database_aspect
+build:clion --output_groups=compilation_database
+
+# Try importing a user specific .bazelrc file (optional)
+try-import %workspace%/.bazelrc.user
