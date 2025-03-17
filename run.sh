@@ -74,22 +74,25 @@ else
     DOCKER_ARGS="-it"
 fi
 
+mkdir -p ~/.cache/remote_dev_jetbrains
+
 # Run the container with SSH agent forwarding
 docker run $DOCKER_ARGS \
     --name "$CONTAINER_NAME" \
     -v "$(pwd):/host" \
     -v /tmp:/tmp \
+    -v $HOME/.cache/remote_dev_jetbrains:/root/.cache/JetBrains \
     -v "$SSH_AUTH_SOCK:/ssh-agent" \
     -e SSH_AUTH_SOCK=/ssh-agent \
-    -p 127.0.0.1:2222:22 \
+    -p 0.0.0.0:2222:22 \
     "$IMAGE_NAME" $([[ "$DAEMON_MODE" = true ]] && echo "-d")
 
 if [ "$DAEMON_MODE" = true ]; then
     echo "Container is running in background."
-    echo "SSH server is available at localhost:2222"
+    echo "SSH server is available at 0.0.0.0:2222"
     echo "Username: root"
     echo "Password: root"
     echo ""
-    echo "You can connect CLion via SSH to localhost:2222"
+    echo "You can connect CLion via SSH to 0.0.0.0:2222"
     echo "You can attach to the container with: docker exec -it $CONTAINER_NAME bash"
 fi
